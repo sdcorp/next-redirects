@@ -5,13 +5,13 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const tk = request.cookies.get("tk")?.value;
 
-  const to = new URL("/", request.url);
+  const to = new URL("/invalid", request.url);
   to.searchParams.set("from", request.nextUrl.pathname);
 
-  // if (!tk) {
-  //   console.log("redirect to home...");
-  //   return NextResponse.redirect(to);
-  // }
+  if (!tk) {
+    console.log("redirect to home...");
+    return NextResponse.redirect(to);
+  }
 
   const response = NextResponse.next();
   console.log("[MIDDLEWARE]", [

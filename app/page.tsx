@@ -1,7 +1,8 @@
 "use client";
 
-import { doRedirect } from "@/app/_actions";
+import { deleteCookie, doRedirect } from "@/app/_actions";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
@@ -11,6 +12,7 @@ function getBaseUrl() {
 
 export default function Home() {
   const API_URL = getBaseUrl() + "/api/redirect";
+  const router = useRouter();
 
   return (
     <main>
@@ -33,11 +35,12 @@ export default function Home() {
         <div>
           <button
             type="button"
-            onClick={async () => {
-              await fetch(API_URL, {
+            onClick={() => {
+              void fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({ type: "redirect" }),
               });
+              // .then(() => router.push("/redirected"));
             }}
           >
             Redirect (API Route with redirect)
@@ -87,6 +90,11 @@ export default function Home() {
         <div>
           <form action={doRedirect}>
             <button type="submit">Redirect (Server Action)</button>
+          </form>
+        </div>
+        <div>
+          <form action={deleteCookie}>
+            <button type="submit">Delete cookie</button>
           </form>
         </div>
       </div>
