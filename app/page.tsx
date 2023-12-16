@@ -3,22 +3,38 @@
 import { doRedirect } from "@/app/_actions";
 import Link from "next/link";
 
+function getBaseUrl() {
+  if (typeof window !== "undefined") return "";
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
 export default function Home() {
+  const API_URL = getBaseUrl() + "/api/redirect";
+
   return (
     <main>
-      <h1>Redirects options ("use client")</h1>
+      <h1>Redirects options</h1>
       <br />
-      <p>It has to set cookie and redirect to "/another" page</p>
+      <p>
+        Click a button to perform a redirect to the "/redirected" page. Use with
+        Chrome Devtools / Network opened
+      </p>
       <br />
-      <Link href="/another">Go to another page</Link>
+      <p>
+        Note: redirect is done on the server via API Route handler
+        ("/api/redirect") and Server Action
+      </p>
+      <br />
+      <Link href="/redirected">Go to redirected page</Link>
       <br />
       <br />
       <div style={{ display: "grid", gap: 16 }}>
         <div>
           <button
             type="button"
-            onClick={() => {
-              void fetch("/api/run", {
+            onClick={async () => {
+              await fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({ type: "redirect" }),
               });
@@ -31,7 +47,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => {
-              void fetch("/api/run", {
+              void fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({ type: "NextResponse.redirect" }),
               });
@@ -44,7 +60,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => {
-              void fetch("/api/run", {
+              void fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({ type: "NextResponse.rewrite" }),
               }).then((r) => {

@@ -1,11 +1,11 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 
-export default function AnotherPage() {
+export default function RedirectedPage() {
   const tk = cookies().get("tk")?.value;
   return (
     <main>
-      <h1>Another Page (RSC)</h1>
+      <h1>Redirected Page (RSC)</h1>
       <br />
       <p>Cookie [tk]: {String(tk)}</p>
       <br />

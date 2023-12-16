@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
 
 export async function doRedirect() {
   cookies().set("tk", Math.random().toString());
-  redirect("/another");
+  redirect("/redirected");
 }

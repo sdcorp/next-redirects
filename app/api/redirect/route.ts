@@ -6,13 +6,13 @@ export async function POST(request: Request) {
   const res = await request.json();
   cookies().set("tk", Math.random().toString());
 
-  const to = new URL("/another", request.url);
+  const to = new URL("/redirected", request.url);
 
   console.log("[API-ROUTE]", { to, res });
 
   if (res?.type === "redirect") {
-    // return permanentRedirect("/another");
-    // return redirect("/another");
+    // return permanentRedirect("/redirected");
+    // return redirect("/redirected");
     return redirect(to.href);
   }
 
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   }
 
   if (res?.type === "NextResponse.rewrite") {
-    //! NOTE: NextResponse.rewrite() was used in a app route handler, this is not currently supported.
+    //! NOTE: NextResponse.rewrite() was used in a app route handler, this is not currently supported. But docs says nothing about that
     return NextResponse.rewrite(to);
   }
 
