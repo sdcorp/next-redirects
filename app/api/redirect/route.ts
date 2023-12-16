@@ -8,7 +8,10 @@ export async function POST(request: Request) {
 
   const to = new URL("/redirected", request.url);
 
-  console.log("[API-ROUTE]", { to, res });
+  console.log("[API-ROUTE]", [
+    ["request.url", request.url],
+    ["to.href", to.href],
+  ]);
 
   if (res?.type === "redirect") {
     // return permanentRedirect("/redirected");

@@ -2,7 +2,6 @@
 
 import { deleteCookie, doRedirect } from "@/app/_actions";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
@@ -12,7 +11,6 @@ function getBaseUrl() {
 
 export default function Home() {
   const API_URL = getBaseUrl() + "/api/redirect";
-  const router = useRouter();
 
   return (
     <main>
@@ -39,7 +37,7 @@ export default function Home() {
               void fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({ type: "redirect" }),
-              }).then(() => router.push("/redirected"));
+              });
             }}
           >
             Redirect (API Route with redirect)
