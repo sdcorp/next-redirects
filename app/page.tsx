@@ -39,8 +39,7 @@ export default function Home() {
               void fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify({ type: "redirect" }),
-              });
-              // .then(() => router.push("/redirected"));
+              }).then(() => router.push("/redirected"));
             }}
           >
             Redirect (API Route with redirect)
