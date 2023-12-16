@@ -1,95 +1,79 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { doRedirect } from "@/app/_actions";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
+    <main>
+      <h1>Redirects options ("use client")</h1>
+      <br />
+      <p>It has to set cookie and redirect to "/another" page</p>
+      <br />
+      <Link href="/another">Go to another page</Link>
+      <br />
+      <br />
+      <div style={{ display: "grid", gap: 16 }}>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => {
+              void fetch("/api/run", {
+                method: "POST",
+                body: JSON.stringify({ type: "redirect" }),
+              });
+            }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            Redirect (API Route with redirect)
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              void fetch("/api/run", {
+                method: "POST",
+                body: JSON.stringify({ type: "NextResponse.redirect" }),
+              });
+            }}
+          >
+            Redirect (API Route with NextResponse.redirect)
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              void fetch("/api/run", {
+                method: "POST",
+                body: JSON.stringify({ type: "NextResponse.rewrite" }),
+              }).then((r) => {
+                if (r.status >= 500) {
+                  alert(
+                    JSON.stringify(
+                      {
+                        status: r.status,
+                        reason:
+                          "Error: NextResponse.rewrite() was used in a app route handler, this is not currently supported. Please remove the invocation to continue.",
+                      },
+                      null,
+                      2
+                    )
+                  );
+                }
+                return r;
+              });
+            }}
+          >
+            Redirect (API Route with NextResponse.rewrite) [500]
+          </button>
+        </div>
+        <div>
+          <form action={doRedirect}>
+            <button type="submit">Redirect (Server Action)</button>
+          </form>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
-  )
+  );
 }
